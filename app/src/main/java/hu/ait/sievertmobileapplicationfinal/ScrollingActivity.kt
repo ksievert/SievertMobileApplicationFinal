@@ -3,7 +3,9 @@ package hu.ait.sievertmobileapplicationfinal
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
-import hu.ait.sievertmobileapplicationfinal.network.BKKAPI
+import hu.ait.sievertmobileapplicationfinal.data.Base
+import hu.ait.sievertmobileapplicationfinal.data.SearchParser
+import hu.ait.sievertmobileapplicationfinal.network.TransitAPI
 import kotlinx.android.synthetic.main.activity_scrolling.*
 import kotlinx.android.synthetic.main.content_scrolling.*
 import retrofit2.Call
@@ -11,6 +13,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.net.URL
 
 class ScrollingActivity : AppCompatActivity() {
 
@@ -22,34 +25,45 @@ class ScrollingActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
+
+
     }
 
-    fun getBKKData() {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.openweathermap.org")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+//    fun getTransitData(stopName:String) {
+//        val retrofit = Retrofit.Builder()
+//            .baseUrl("https://api.bart.gov/")
+//            .addConverterFactory(GsonConverterFactory.create())
+//            .build()
+//
+//        val transitAPI = retrofit.create(TransitAPI::class.java)
+//
+//        val call = transitAPI.getTransitDetails(
+//            stopName, "QSR8-5PY9-9QDT-DWEI",
+//            "y"
+//        )
+//
+//
+//        call.enqueue(object : Callback<Base> {
+//            override fun onResponse(call: Call<Base>, response: Response<Base>) {
+//                var etdResult = response.body()
+//                if(etdResult != null) {
+//                    tvJSON.text = etdResult?.root?.station?.toString()
+//                }
+//
+//            }
+//
+//            override fun onFailure(call: Call<Base>, t: Throwable) {
+//                tvJSON.text = t.message
+//
+//            }
+//        })
+//    }
 
-        val weatherAPI = retrofit.create(BKKAPI::class.java)
+//    fun displayStops(query: String){
+//        var result = URL("https://private-anon-23547e7cbe-bkkfutar.apiary-proxy.com/api/query/v1/ws/otp/api/where/search.json?&version=3&appVersion=apiary-1.0&includeReferences=true&query=$query").readText().toString()
+//        var stopIDs = SearchParser.getStopIDs(result)
+//        tvJSON.text = stopIDs.toString()
+//    }
 
-        val call = BKKAPI.getBKKDetails(
-            cityName, "metric",
-            "19eaa5bb6f3fc28a87efb91bed1ae16f"
-        )
 
-
-        call.enqueue(object : Callback<Base> {
-            override fun onResponse(call: Call<Base>, response: Response<Base>) {
-                var apiResult = response.body()
-
-                //todo put data here to fill in the xml
-
-            }
-
-            override fun onFailure(call: Call<Base>, t: Throwable) {
-                tvJSON.text = t.message
-
-            }
-        })
-    }
 }
