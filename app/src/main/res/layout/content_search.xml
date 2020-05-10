@@ -17,20 +17,20 @@
         android:id="@+id/etStopName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Search for stop name"/>
+        android:hint="@string/search_for_stop_name"/>
 
     <Button
         android:id="@+id/btnSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Search"/>
+        android:text="@string/search"/>
 
-    <TextView
-        android:id="@+id/tvJSON"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="json file goes here" />
+<!--    <TextView-->
+<!--        android:id="@+id/tvJSON"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="@dimen/text_margin"-->
+<!--        android:text="json file goes here" />-->
 
         <LinearLayout
             android:id="@+id/layoutContent"

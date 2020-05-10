@@ -1,5 +1,6 @@
 package hu.ait.sievertmobileapplicationfinal
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
@@ -9,10 +10,26 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import hu.ait.sievertmobileapplicationfinal.SearchActivity.Companion.DESTINATION
+import hu.ait.sievertmobileapplicationfinal.SearchActivity.Companion.STOP_QUERY
+import hu.ait.sievertmobileapplicationfinal.data.Base
+import hu.ait.sievertmobileapplicationfinal.network.TransitAPI
+import kotlinx.android.synthetic.main.activity_maps.*
+import kotlinx.android.synthetic.main.content_search.*
+import kotlinx.android.synthetic.main.departure_row.*
+import kotlinx.android.synthetic.main.departure_row.view.*
+import kotlinx.android.synthetic.main.results_row.*
+import kotlinx.android.synthetic.main.results_row.view.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
+    lateinit var currentDestination: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +38,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+        getDepartures(intent.getStringExtra(STOP_QUERY)!!)
+        currentDestination = intent.getStringExtra(DESTINATION)!!
+
+        btnBack.setOnClickListener() {
+            val intent = Intent(this, SearchActivity::class.java)
+            this.startActivity(intent)
+        }
+
+
     }
 
     /**
@@ -39,5 +65,59 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val sydney = LatLng(-34.0, 151.0)
         mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+    }
+
+    fun getDepartures(stopName:String) {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://api.bart.gov/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val transitAPI = retrofit.create(TransitAPI::class.java)
+
+        val call = transitAPI.getTransitDetails(
+            stopName, "QSR8-5PY9-9QDT-DWEI",
+            "y"
+        )
+
+
+        call.enqueue(object : Callback<Base> {
+            override fun onResponse(call: Call<Base>, response: Response<Base>) {
+                var etdResult = response.body()
+                if(etdResult != null) {
+                    departureInflater(response)
+                }
+
+            }
+
+            override fun onFailure(call: Call<Base>, t: Throwable) {
+                tvDestinationStop.text = t.message
+
+            }
+        })
+    }
+
+    fun departureInflater(response: Response<Base>) {
+
+        var etdList = response.body()?.root?.station?.get(0)?.etd
+        if (etdList != null) {
+            for (x in etdList) {
+                if(currentDestination == x.destination!!) {
+                    for (y in x.estimate!!) {
+                        var departureRow = layoutInflater.inflate(
+                            R.layout.departure_row,
+                            null, false
+                        )
+                        departureRow.tvCurrentStop.text = response.body()?.root?.station?.get(0)?.name
+                        departureRow.tvDestinationStop.text = currentDestination
+                        departureRow.minutes.text = y.minutes.toString()
+                        departureRow.platform.text = y.platform.toString()
+                        layoutContent.addView(departureRow)
+                        //resultRow.ivRouteColor.setImageDrawable()
+                        //y.hexcolor?.toInt()?.let { resultRow.ivRouteColor.setBackgroundColor(it) }
+                    }
+                }
+            }
+        }
     }
 }

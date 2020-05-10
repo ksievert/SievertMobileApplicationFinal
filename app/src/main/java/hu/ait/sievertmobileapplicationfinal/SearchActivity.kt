@@ -1,5 +1,6 @@
 package hu.ait.sievertmobileapplicationfinal
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import hu.ait.sievertmobileapplicationfinal.data.Base
 import hu.ait.sievertmobileapplicationfinal.network.TransitAPI
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.content_search.*
+import kotlinx.android.synthetic.main.results_row.*
 import kotlinx.android.synthetic.main.results_row.view.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -17,6 +19,13 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
+
+    var stop_query = ""
+
+    companion object {
+        const val STOP_QUERY = "STOP_QUERY"
+        const val DESTINATION = "DESTINATION"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +42,16 @@ class SearchActivity : AppCompatActivity() {
             }
             else {
                 layoutContent.removeAllViews()
+                stop_query = etStopName.text.toString()
                 getTransitData(etStopName.text.toString())
+            }
+        }
+        if(layoutContent.childCount > 0) {
+            resultItem!!.setOnClickListener() {
+                val intent = Intent(this, MapsActivity::class.java)
+                intent.putExtra(STOP_QUERY, stop_query)
+                intent.putExtra(DESTINATION, destination.text.toString())
+                this.startActivity(intent)
             }
         }
     }
@@ -56,14 +74,13 @@ class SearchActivity : AppCompatActivity() {
             override fun onResponse(call: Call<Base>, response: Response<Base>) {
                 var etdResult = response.body()
                 if(etdResult != null) {
-                    tvJSON.text = etdResult?.root?.station?.size.toString()
                     fillInflater(response)
                 }
 
             }
 
             override fun onFailure(call: Call<Base>, t: Throwable) {
-                tvJSON.text = t.message
+                etStopName.error = t.message //alternatively, "stop not found"?
 
             }
         })
@@ -80,8 +97,6 @@ class SearchActivity : AppCompatActivity() {
                     var resultRow = layoutInflater.inflate(R.layout.results_row,
                         null, false)
                     resultRow.destination.text = currentDestination
-                    resultRow.minutes.text = y.minutes.toString()
-                    resultRow.platform.text = y.platform.toString()
                     layoutContent.addView(resultRow)
                     //resultRow.ivRouteColor.setImageDrawable()
                     //y.hexcolor?.toInt()?.let { resultRow.ivRouteColor.setBackgroundColor(it) }
