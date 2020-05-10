@@ -97,4 +97,5 @@
     <string name="search_for_stop_name">Search for stop name</string>
     <string name="search">Search</string>
     <string name="error1">Stop not found</string>
+    <string name="title_activity_maps2">Map</string>
 </resources>

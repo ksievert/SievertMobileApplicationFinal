@@ -13,6 +13,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 import hu.ait.sievertmobileapplicationfinal.SearchActivity.Companion.DESTINATION
 import hu.ait.sievertmobileapplicationfinal.SearchActivity.Companion.STOP_QUERY
 import hu.ait.sievertmobileapplicationfinal.data.Base
+import hu.ait.sievertmobileapplicationfinal.data.Base2
+import hu.ait.sievertmobileapplicationfinal.network.StopInfoAPI
 import hu.ait.sievertmobileapplicationfinal.network.TransitAPI
 import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.android.synthetic.main.content_search.*
@@ -30,6 +32,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     lateinit var currentDestination: String
+    lateinit var stopLocation: LatLng
+    lateinit var currentStopName: String
+    lateinit var stopQuery: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +43,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-        getDepartures(intent.getStringExtra(STOP_QUERY)!!)
+        stopQuery = intent.getStringExtra(STOP_QUERY)!!
+        getDepartures(stopQuery)
         currentDestination = intent.getStringExtra(DESTINATION)!!
 
         btnBack.setOnClickListener() {
@@ -61,10 +67,41 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        getStopLocation(stopQuery)
+        mMap.addMarker(MarkerOptions().position(stopLocation).title(currentStopName))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(stopLocation))
+    }
+
+    fun getStopLocation(stopName:String) {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://api.bart.gov/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val StopInfoAPI = retrofit.create(StopInfoAPI::class.java)
+
+        val call = StopInfoAPI.getTransitDetails(
+            stopName, "QSR8-5PY9-9QDT-DWEI",
+            "y"
+        )
+
+
+        call.enqueue(object : Callback<Base2> {
+            override fun onResponse(call: Call<Base2>, response: Response<Base2>) {
+                var locationResult = response.body()
+                if(locationResult != null) {
+                    stopLocation = LatLng(locationResult.root?.stations?.station?.gtfs_latitude!!.toDouble(),
+                        locationResult.root?.stations?.station?.gtfs_longitude!!.toDouble())
+                    currentStopName = locationResult.root?.stations?.station?.name!!.toString()
+                }
+
+            }
+
+            override fun onFailure(call: Call<Base2>, t: Throwable) {
+                tvDestinationStop.text = t.message
+
+            }
+        })
     }
 
     fun getDepartures(stopName:String) {

@@ -80,7 +80,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<Base>, t: Throwable) {
-                etStopName.error = t.message //alternatively, "stop not found"?
+                etStopName.error = t.message //alternatively, "No current trains at this stop"?
 
             }
         })
