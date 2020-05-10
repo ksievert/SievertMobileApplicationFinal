@@ -14,7 +14,7 @@ data class Etd156029136(val destination: String?, val abbreviation: String?, val
 
 data class Root(val id: String?, val uri: Uri?, val date: String?, val time: String?, val station: List<Station106556928>?, val message: String?)
 
-data class Station106556928(val name: String?, val abbr: String?, val etd: List<Any>?)
+data class Station106556928(val name: String?, val abbr: String?, val etd: List<Etd156029136>?)
 
 data class Uri(val cdatasection: String?)
 
