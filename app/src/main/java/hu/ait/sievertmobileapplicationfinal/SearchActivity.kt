@@ -32,6 +32,7 @@ class SearchActivity : AppCompatActivity() {
                 etStopName.error = "Must enter search here"
             }
             else {
+                layoutContent.removeAllViews()
                 getTransitData(etStopName.text.toString())
             }
         }
@@ -81,7 +82,7 @@ class SearchActivity : AppCompatActivity() {
                     resultRow.destination.text = currentDestination
                     resultRow.minutes.text = y.minutes.toString()
                     resultRow.platform.text = y.platform.toString()
-                    layoutContent.addView(resultRow, 0)
+                    layoutContent.addView(resultRow)
                     //resultRow.ivRouteColor.setImageDrawable()
                     //y.hexcolor?.toInt()?.let { resultRow.ivRouteColor.setBackgroundColor(it) }
                 }

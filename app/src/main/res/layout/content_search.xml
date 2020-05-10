@@ -9,7 +9,6 @@
     tools:showIn="@layout/activity_search">
 
     <LinearLayout
-        android:id="@+id/layoutContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -32,6 +31,12 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
         android:text="json file goes here" />
+
+        <LinearLayout
+            android:id="@+id/layoutContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
 
     </LinearLayout>
 
