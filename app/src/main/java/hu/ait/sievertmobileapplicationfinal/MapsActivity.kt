@@ -3,11 +3,13 @@ package hu.ait.sievertmobileapplicationfinal
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import hu.ait.sievertmobileapplicationfinal.SearchActivity.Companion.DESTINATION
@@ -17,6 +19,7 @@ import hu.ait.sievertmobileapplicationfinal.data.Base2
 import hu.ait.sievertmobileapplicationfinal.network.StopInfoAPI
 import hu.ait.sievertmobileapplicationfinal.network.TransitAPI
 import kotlinx.android.synthetic.main.activity_maps.*
+import kotlinx.android.synthetic.main.activity_maps.view.*
 import kotlinx.android.synthetic.main.content_search.*
 import kotlinx.android.synthetic.main.departure_row.*
 import kotlinx.android.synthetic.main.departure_row.view.*
@@ -32,8 +35,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     lateinit var currentDestination: String
-    lateinit var stopLocation: LatLng
-    lateinit var currentStopName: String
+    var stopLocation = LatLng(0.0, 0.0)
+    var currentStopName = ""
     lateinit var stopQuery: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,10 +69,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-
         getStopLocation(stopQuery)
-        mMap.addMarker(MarkerOptions().position(stopLocation).title(currentStopName))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(stopLocation))
     }
 
     fun getStopLocation(stopName:String) {
@@ -93,6 +93,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     stopLocation = LatLng(locationResult.root?.stations?.station?.gtfs_latitude!!.toDouble(),
                         locationResult.root?.stations?.station?.gtfs_longitude!!.toDouble())
                     currentStopName = locationResult.root?.stations?.station?.name!!.toString()
+
+                    mMap.addMarker(MarkerOptions().position(stopLocation).title(currentStopName))
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(stopLocation))
+                    mMap.moveCamera(CameraUpdateFactory.zoomTo(15f))
                 }
 
             }
@@ -145,11 +149,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                             R.layout.departure_row,
                             null, false
                         )
-                        departureRow.tvCurrentStop.text = response.body()?.root?.station?.get(0)?.name
-                        departureRow.tvDestinationStop.text = currentDestination
+                        tvStopName.text = response.body()?.root?.station?.get(0)?.name
+                        tvDepartureName.text = currentDestination
                         departureRow.minutes.text = y.minutes.toString()
                         departureRow.platform.text = y.platform.toString()
-                        layoutContent.addView(departureRow)
+                        departureContent.addView(departureRow)
                         //resultRow.ivRouteColor.setImageDrawable()
                         //y.hexcolor?.toInt()?.let { resultRow.ivRouteColor.setBackgroundColor(it) }
                     }

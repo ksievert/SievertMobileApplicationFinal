@@ -16,6 +16,11 @@
         android:textSize="40sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/tvDepartureName"
+        android:textSize="40sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
     <LinearLayout
         android:id="@+id/departureContent"
         android:layout_width="match_parent"

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
+import hu.ait.sievertmobileapplicationfinal.adapter.DestinationAdapter
 import hu.ait.sievertmobileapplicationfinal.data.Base
 import hu.ait.sievertmobileapplicationfinal.network.TransitAPI
 import kotlinx.android.synthetic.main.activity_search.*
@@ -21,6 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class SearchActivity : AppCompatActivity() {
 
     var stop_query = ""
+    lateinit var destinationAdapter: DestinationAdapter
 
     companion object {
         const val STOP_QUERY = "STOP_QUERY"
@@ -36,22 +38,18 @@ class SearchActivity : AppCompatActivity() {
                 .setAction("Action", null).show()
         }
 
+        destinationAdapter = DestinationAdapter(this)
+        rvContent.adapter = destinationAdapter
+
         btnSearch.setOnClickListener(){
             if (etStopName.text.isEmpty()) {
                 etStopName.error = "Must enter search here"
             }
             else {
-                layoutContent.removeAllViews()
+                destinationAdapter.clearAll()
                 stop_query = etStopName.text.toString()
+                destinationAdapter.setQuery(stop_query)
                 getTransitData(etStopName.text.toString())
-            }
-        }
-        if(layoutContent.childCount > 0) {
-            resultItem!!.setOnClickListener() {
-                val intent = Intent(this, MapsActivity::class.java)
-                intent.putExtra(STOP_QUERY, stop_query)
-                intent.putExtra(DESTINATION, destination.text.toString())
-                this.startActivity(intent)
             }
         }
     }
@@ -92,15 +90,11 @@ class SearchActivity : AppCompatActivity() {
         if (etdList != null) {
             for(x in etdList) {
                 currentDestination = x.destination!!
-                for(y in x.estimate!!) {
-
-                    var resultRow = layoutInflater.inflate(R.layout.results_row,
-                        null, false)
-                    resultRow.destination.text = currentDestination
-                    layoutContent.addView(resultRow)
+//                for(y in x.estimate!!) {
+                    destinationAdapter.addDestinationItem(currentDestination)
                     //resultRow.ivRouteColor.setImageDrawable()
                     //y.hexcolor?.toInt()?.let { resultRow.ivRouteColor.setBackgroundColor(it) }
-                }
+//                }
             }
         }
     }
