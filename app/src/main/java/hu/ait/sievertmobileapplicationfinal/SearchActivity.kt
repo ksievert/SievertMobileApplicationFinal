@@ -4,10 +4,12 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.widget.ArrayAdapter
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import hu.ait.sievertmobileapplicationfinal.adapter.DestinationAdapter
 import hu.ait.sievertmobileapplicationfinal.data.Base
+import hu.ait.sievertmobileapplicationfinal.data.hardcodedData
 import hu.ait.sievertmobileapplicationfinal.network.TransitAPI
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.content_search.*
@@ -18,10 +20,15 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.util.*
 
 class SearchActivity : AppCompatActivity() {
 
-    var stop_query = ""
     lateinit var destinationAdapter: DestinationAdapter
 
     companion object {
@@ -36,25 +43,40 @@ class SearchActivity : AppCompatActivity() {
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
+
+            val allStops = resources.getStringArray(R.array.all_stops)
+            val adapter = ArrayAdapter(this,
+                android.R.layout.simple_list_item_1, allStops)
+            autoTextView.setAdapter(adapter)
         }
 
         destinationAdapter = DestinationAdapter(this)
         rvContent.adapter = destinationAdapter
 
         btnSearch.setOnClickListener(){
-            if (etStopName.text.isEmpty()) {
-                etStopName.error = "Must enter search here"
+            if (autoTextView.text.isEmpty()) {
+                autoTextView.error = "Must enter search here"
             }
             else {
-                destinationAdapter.clearAll()
-                stop_query = etStopName.text.toString()
-                destinationAdapter.setQuery(stop_query)
-                getTransitData(etStopName.text.toString())
+                getAbbr(autoTextView.text.toString())
             }
         }
     }
 
+    fun getAbbr(stopName: String){
+        var abbr = hardcodedData.abbrMap[stopName]
+        if (abbr == null) {
+            autoTextView.error = "Cannot find station"
+        }
+        else {
+            destinationAdapter.clearAll()
+            destinationAdapter.setQuery(abbr)
+            getTransitData(abbr)
+        }
+    }
+
     fun getTransitData(stopName:String) {
+
         val retrofit = Retrofit.Builder()
             .baseUrl("https://api.bart.gov/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -78,7 +100,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<Base>, t: Throwable) {
-                etStopName.error = t.message //alternatively, "No current trains at this stop"?
+                autoTextView.error = "No upcoming trains at this stop"
 
             }
         })

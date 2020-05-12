@@ -16,6 +16,7 @@ import hu.ait.sievertmobileapplicationfinal.SearchActivity.Companion.DESTINATION
 import hu.ait.sievertmobileapplicationfinal.SearchActivity.Companion.STOP_QUERY
 import hu.ait.sievertmobileapplicationfinal.data.Base
 import hu.ait.sievertmobileapplicationfinal.data.Base2
+import hu.ait.sievertmobileapplicationfinal.data.hardcodedData
 import hu.ait.sievertmobileapplicationfinal.network.StopInfoAPI
 import hu.ait.sievertmobileapplicationfinal.network.TransitAPI
 import kotlinx.android.synthetic.main.activity_maps.*
@@ -43,10 +44,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        stopQuery = intent.getStringExtra(STOP_QUERY)!!
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-        stopQuery = intent.getStringExtra(STOP_QUERY)!!
         getDepartures(stopQuery)
         currentDestination = intent.getStringExtra(DESTINATION)!!
 
@@ -73,7 +74,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     fun getStopLocation(stopName:String) {
-        val retrofit = Retrofit.Builder()
+        if(stopName == "antc" || stopName == "dubl" || stopName == "milb"
+            || stopName == "oakl" || stopName == "rich" || stopName == "warm"){
+            stopLocation = hardcodedData.coordMap[stopName] ?: error("error with coordMap")
+            placePin(stopLocation, stopName) //refactor code so that this doesn't have to be an abbr pls
+            return
+        }
+            val retrofit = Retrofit.Builder()
             .baseUrl("https://api.bart.gov/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -90,22 +97,26 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             override fun onResponse(call: Call<Base2>, response: Response<Base2>) {
                 var locationResult = response.body()
                 if(locationResult != null) {
-                    stopLocation = LatLng(locationResult.root?.stations?.station?.gtfs_latitude!!.toDouble(),
+                    stopLocation = LatLng(locationResult.root?.stations?.station?.gtfs_latitude!!.toDouble(), // refactor code so that these aren't global x2
                         locationResult.root?.stations?.station?.gtfs_longitude!!.toDouble())
                     currentStopName = locationResult.root?.stations?.station?.name!!.toString()
 
-                    mMap.addMarker(MarkerOptions().position(stopLocation).title(currentStopName))
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(stopLocation))
-                    mMap.moveCamera(CameraUpdateFactory.zoomTo(15f))
+                    placePin(stopLocation, currentStopName)
                 }
 
             }
 
             override fun onFailure(call: Call<Base2>, t: Throwable) {
-                tvDestinationStop.text = t.message
+                //tvDestinationStop.text = t.message
 
             }
         })
+    }
+
+    fun placePin(location: LatLng, name:String) {
+        mMap.addMarker(MarkerOptions().position(location).title(name))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(location))
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(17f))
     }
 
     fun getDepartures(stopName:String) {
@@ -132,7 +143,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
 
             override fun onFailure(call: Call<Base>, t: Throwable) {
-                tvDestinationStop.text = t.message
+                //tvCurrentStop.text = t.message
 
             }
         })

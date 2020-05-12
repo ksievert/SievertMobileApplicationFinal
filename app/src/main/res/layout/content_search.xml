@@ -13,11 +13,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/etStopName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/search_for_stop_name"/>
+        <AutoCompleteTextView
+            android:id="@+id/autoTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:hint="@string/search_for_stop_name"/>
 
     <Button
         android:id="@+id/btnSearch"
@@ -31,6 +32,13 @@
 <!--        android:layout_height="wrap_content"-->
 <!--        android:layout_margin="@dimen/text_margin"-->
 <!--        android:text="json file goes here" />-->
+
+        <TextView
+            android:id="@+id/tvSearchError"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvContent"
