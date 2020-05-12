@@ -100,7 +100,7 @@
     <string name="title_activity_maps2">Map</string>
     <string name="stop_name">Stop name</string>
     <string name="default_text">Default text</string>
-    <string name="back_to_search">Back to Search</string>
+    <string name="back_to_search">New Search</string>
 
     <string-array name="all_stops">
         <item>12th St. Oakland City Center</item>

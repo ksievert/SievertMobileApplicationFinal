@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import hu.ait.sievertmobileapplicationfinal.MapsActivity
 import hu.ait.sievertmobileapplicationfinal.R
 import hu.ait.sievertmobileapplicationfinal.SearchActivity
+import hu.ait.sievertmobileapplicationfinal.data.hardcodedData
+import kotlinx.android.synthetic.main.activity_maps.view.*
 import kotlinx.android.synthetic.main.departure_row.view.*
 import kotlinx.android.synthetic.main.results_row.*
 import kotlinx.android.synthetic.main.results_row.view.*
@@ -17,7 +19,7 @@ class DestinationAdapter : RecyclerView.Adapter<DestinationAdapter.ViewHolder> {
 
     var destinationItems = mutableListOf<String>()
     val context: Context
-    lateinit var currentQuery: String
+    var currentQuery = ""
 
     constructor(context: Context) {
         this.context = context
@@ -38,11 +40,13 @@ class DestinationAdapter : RecyclerView.Adapter<DestinationAdapter.ViewHolder> {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) { // steal from scrolling activity
         val currentDestinationItem = destinationItems[position]
 
-        holder.destination.text = currentDestinationItem
+        val destinationText = "to $currentDestinationItem"
+        holder.destination.text = destinationText
+        holder.stopName.text = currentQuery
 
         holder.background.setOnClickListener() {
             val intent = Intent(context, MapsActivity::class.java)
-            intent.putExtra(SearchActivity.STOP_QUERY, currentQuery)
+            intent.putExtra(SearchActivity.STOP_QUERY, hardcodedData.abbrMap[currentQuery])
             intent.putExtra(SearchActivity.DESTINATION, currentDestinationItem)
             context.startActivity(intent)
         }
@@ -65,6 +69,7 @@ class DestinationAdapter : RecyclerView.Adapter<DestinationAdapter.ViewHolder> {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val destination = itemView.destination
+        val stopName = itemView.currentStop
         val background = itemView.resultItem
     }
 

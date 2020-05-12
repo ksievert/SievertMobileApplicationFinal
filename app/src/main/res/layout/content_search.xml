@@ -26,6 +26,13 @@
 <!--            android:layout_width="wrap_content"-->
 <!--            android:layout_height="wrap_content"-->
 <!--            android:gravity="center_horizontal"/>-->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/searchToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
         <LinearLayout
             android:id="@+id/layoutSearchBox"
             android:layout_width="match_parent"
@@ -38,6 +45,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="8"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/colorLightGrayText"
             android:hint="@string/search_for_stop_name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -57,16 +66,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/autoTextView" />
         </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
 
-        <ImageView
-            android:id="@+id/ivDividerLine"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/divider_line"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layoutSearchBox" />
+<!--        <View-->
+<!--            android:id="@+id/ivDividerLine"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="5dp"-->
+<!--            android:layout_marginTop="5dp"-->
+<!--            android:layout_marginBottom="5dp"-->
+<!--            android:src="@drawable/divider_line"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/searchToolbar" />-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvContent"
@@ -76,7 +87,7 @@
             android:orientation="vertical"
             android:scrollbars="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintTop_toBottomOf="@+id/ivDividerLine"
+            app:layout_constraintTop_toBottomOf="@+id/searchToolbar"
             tools:layout_editor_absoluteX="0dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

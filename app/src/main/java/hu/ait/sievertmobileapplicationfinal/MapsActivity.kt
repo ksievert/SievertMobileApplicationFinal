@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -52,6 +53,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         currentDestination = intent.getStringExtra(DESTINATION)!!
 
         btnBack.setOnClickListener() {
+            val intent = Intent(this, SearchActivity::class.java)
+            this.startActivity(intent)
+        }
+        tvBack.setOnClickListener(){
             val intent = Intent(this, SearchActivity::class.java)
             this.startActivity(intent)
         }
@@ -149,6 +154,24 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         })
     }
 
+    fun setCircleColor(departureRow: View, color: String) {
+        if(color == "YELLOW") {
+            departureRow.circle.setBackgroundResource(R.drawable.yellow_circle)
+        }
+        else if(color == "RED") {
+            departureRow.circle.setBackgroundResource(R.drawable.red_circle)
+        }
+        else if(color == "ORANGE") {
+            departureRow.circle.setBackgroundResource(R.drawable.orange_circle)
+        }
+        else if(color == "GREEN") {
+            departureRow.circle.setBackgroundResource(R.drawable.green_circle)
+        }
+        else if(color == "BLUE") {
+            departureRow.circle.setBackgroundResource(R.drawable.blue_circle)
+        }
+    }
+
     fun departureInflater(response: Response<Base>) {
 
         var etdList = response.body()?.root?.station?.get(0)?.etd
@@ -163,13 +186,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         tvStopName.text = response.body()?.root?.station?.get(0)?.name
                         var departureName = "to $currentDestination"
                         tvDepartureName.text = departureName
-                        var minutesText = "in ${y.minutes.toString()} min"
+
+                        var minutesText: String
+                        minutesText = if(y.minutes.toString().length > 3) {
+                            y.minutes.toString()
+                        } else {
+                            "in ${y.minutes.toString()} min"
+                        }
+                        
                         departureRow.minutes.text = minutesText
                         var platformText = "Platform ${y.platform.toString()}"
                         departureRow.platform.text = platformText
+                        setCircleColor(departureRow, y.color!!)
                         departureContent.addView(departureRow)
-                        //resultRow.ivRouteColor.setImageDrawable()
-                        //y.hexcolor?.toInt()?.let { resultRow.ivRouteColor.setBackgroundColor(it) }
+
                     }
                 }
             }

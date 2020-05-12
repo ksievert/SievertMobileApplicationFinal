@@ -68,7 +68,7 @@ class SearchActivity : AppCompatActivity() {
         }
         else {
             destinationAdapter.clearAll()
-            destinationAdapter.setQuery(abbr)
+            destinationAdapter.setQuery(stopName)
             getTransitData(abbr)
         }
     }
