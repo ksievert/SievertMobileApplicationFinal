@@ -170,6 +170,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         else if(color == "BLUE") {
             departureRow.circle.setBackgroundResource(R.drawable.blue_circle)
         }
+        else if(color == "PURPLE") {
+            departureRow.circle.setBackgroundResource(R.drawable.purple_circle)
+        }
     }
 
     fun departureInflater(response: Response<Base>) {

@@ -13,6 +13,6 @@
     <color name="greenLine">#339933</color>
     <color name="redLine">#ff0000</color>
     <color name="orangeLine">#ff9933</color>
-<!--    <color name="purpleLine"></color>-->
+    <color name="purpleLine">#c463c5</color>
     <color name="grayLine">#d5cfa3</color>
 </resources>
