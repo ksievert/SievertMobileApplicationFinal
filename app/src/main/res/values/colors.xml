@@ -5,4 +5,14 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="colorTest">#D8DADA</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorArrowGray">#6BC4C4C4</color>
+    <color name="colorLightGrayText">#BABEC0</color>
+    <color name="yellowLine">#ffff33</color>
+    <color name="blueLine">#0099cc</color>
+    <color name="greenLine">#339933</color>
+    <color name="redLine">#ff0000</color>
+    <color name="orangeLine">#ff9933</color>
+<!--    <color name="purpleLine"></color>-->
+    <color name="grayLine">#d5cfa3</color>
 </resources>

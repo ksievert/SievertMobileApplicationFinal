@@ -95,11 +95,12 @@
     <string name="title_activity_search">SearchActivity</string>
     <string name="back">Back</string>
     <string name="search_for_stop_name">Search for stop name</string>
-    <string name="search">Search</string>
+    <string name="search">Go</string>
     <string name="error1">Stop not found</string>
     <string name="title_activity_maps2">Map</string>
     <string name="stop_name">Stop name</string>
     <string name="default_text">Default text</string>
+    <string name="back_to_search">Back to Search</string>
 
     <string-array name="all_stops">
         <item>12th St. Oakland City Center</item>

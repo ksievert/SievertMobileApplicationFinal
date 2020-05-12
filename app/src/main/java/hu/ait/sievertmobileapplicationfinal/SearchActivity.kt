@@ -40,17 +40,13 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-        setSupportActionBar(toolbar)
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
 
             val stopSearchBar = findViewById<AutoCompleteTextView>(R.id.autoTextView)
             val allStops = resources.getStringArray(R.array.all_stops)
-            val adapter = ArrayAdapter(this,
-                android.R.layout.simple_list_item_1, allStops)
-            stopSearchBar.setAdapter(adapter)
-        }
+            val stopsAdapter = ArrayAdapter(this,
+                android.R.layout.simple_dropdown_item_1line, allStops)
+            stopSearchBar.setAdapter(stopsAdapter)
+
 
         destinationAdapter = DestinationAdapter(this)
         rvContent.adapter = destinationAdapter

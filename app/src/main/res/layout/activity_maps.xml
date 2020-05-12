@@ -30,8 +30,20 @@
                     android:layout_height="30dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginTop="8dp"
-                    android:src="@drawable/back_arrow"
+                    android:src="@drawable/back_arrow_gray"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/back_to_search"
+                    android:textColor="@color/colorArrowGray"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/btnBack"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -60,7 +72,9 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.appcompat.widget.Toolbar>
 
-
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:id="@+id/departureContent"
@@ -76,6 +90,10 @@
                 android:layout_height="300dp"
                 android:layout_margin="16dp"
                 tools:context=".MapsActivity" />
+
+        </androidx.core.widget.NestedScrollView>
+
+
 
     </LinearLayout>
 </LinearLayout>
