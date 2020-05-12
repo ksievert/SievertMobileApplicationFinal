@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
-    android:padding="16dp"
-    android:layout_marginBottom="16dp"
+    android:layout_marginBottom="32dp"
+    app:contentPadding="3dp"
     android:orientation="vertical">
 
 <androidx.constraintlayout.widget.ConstraintLayout
