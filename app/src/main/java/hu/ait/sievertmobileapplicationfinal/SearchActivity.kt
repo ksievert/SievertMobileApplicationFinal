@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import hu.ait.sievertmobileapplicationfinal.adapter.DestinationAdapter
@@ -44,10 +45,11 @@ class SearchActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
 
+            val stopSearchBar = findViewById<AutoCompleteTextView>(R.id.autoTextView)
             val allStops = resources.getStringArray(R.array.all_stops)
             val adapter = ArrayAdapter(this,
                 android.R.layout.simple_list_item_1, allStops)
-            autoTextView.setAdapter(adapter)
+            stopSearchBar.setAdapter(adapter)
         }
 
         destinationAdapter = DestinationAdapter(this)

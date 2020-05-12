@@ -161,9 +161,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                             null, false
                         )
                         tvStopName.text = response.body()?.root?.station?.get(0)?.name
-                        tvDepartureName.text = currentDestination
-                        departureRow.minutes.text = y.minutes.toString()
-                        departureRow.platform.text = y.platform.toString()
+                        var departureName = "to $currentDestination"
+                        tvDepartureName.text = departureName
+                        var minutesText = "in ${y.minutes.toString()} min"
+                        departureRow.minutes.text = minutesText
+                        var platformText = "Platform ${y.platform.toString()}"
+                        departureRow.platform.text = platformText
                         departureContent.addView(departureRow)
                         //resultRow.ivRouteColor.setImageDrawable()
                         //y.hexcolor?.toInt()?.let { resultRow.ivRouteColor.setBackgroundColor(it) }
