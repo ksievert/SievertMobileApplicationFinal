@@ -36,19 +36,18 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
-    lateinit var currentDestination: String
-    var stopLocation = LatLng(0.0, 0.0)
-    var currentStopName = ""
+    private lateinit var currentDestination: String
     lateinit var stopQuery: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+
         stopQuery = intent.getStringExtra(STOP_QUERY)!!
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
         getDepartures(stopQuery)
         currentDestination = intent.getStringExtra(DESTINATION)!!
 
@@ -64,25 +63,25 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         getStopLocation(stopQuery)
     }
 
-    fun getStopLocation(stopName:String) {
-        if(stopName == "antc" || stopName == "dubl" || stopName == "milb"
+    private fun checkIfEndStop(stopName: String): Boolean {
+        return if(stopName == "antc" || stopName == "dubl" || stopName == "milb"
             || stopName == "oakl" || stopName == "rich" || stopName == "warm"){
-            stopLocation = hardcodedData.coordMap[stopName] ?: error("error with coordMap")
-            placePin(stopLocation, stopName) //refactor code so that this doesn't have to be an abbr pls
+            var stopLocation = hardcodedData.coordMap[stopName] ?: error("error with coordMap")
+            placePin(stopLocation, stopName)
+            true
+        } else {
+            false
+        }
+    }
+
+    fun getStopLocation(stopName:String) {
+
+        if(checkIfEndStop(stopName)) {
             return
         }
             val retrofit = Retrofit.Builder()
@@ -102,9 +101,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             override fun onResponse(call: Call<Base2>, response: Response<Base2>) {
                 var locationResult = response.body()
                 if(locationResult != null) {
-                    stopLocation = LatLng(locationResult.root?.stations?.station?.gtfs_latitude!!.toDouble(), // refactor code so that these aren't global x2
+                    var stopLocation = LatLng(locationResult.root?.stations?.station?.gtfs_latitude!!.toDouble(), // refactor code so that these aren't global x2
                         locationResult.root?.stations?.station?.gtfs_longitude!!.toDouble())
-                    currentStopName = locationResult.root?.stations?.station?.name!!.toString()
+                    var currentStopName = locationResult.root?.stations?.station?.name!!.toString()
 
                     placePin(stopLocation, currentStopName)
                 }
@@ -112,7 +111,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
 
             override fun onFailure(call: Call<Base2>, t: Throwable) {
-                //tvDestinationStop.text = t.message
 
             }
         })
@@ -148,36 +146,37 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
 
             override fun onFailure(call: Call<Base>, t: Throwable) {
-                //tvCurrentStop.text = t.message
 
             }
         })
     }
 
-    fun setCircleColor(departureRow: View, color: String) {
-        if(color == "YELLOW") {
-            departureRow.circle.setBackgroundResource(R.drawable.yellow_circle)
-        }
-        else if(color == "RED") {
-            departureRow.circle.setBackgroundResource(R.drawable.red_circle)
-        }
-        else if(color == "ORANGE") {
-            departureRow.circle.setBackgroundResource(R.drawable.orange_circle)
-        }
-        else if(color == "GREEN") {
-            departureRow.circle.setBackgroundResource(R.drawable.green_circle)
-        }
-        else if(color == "BLUE") {
-            departureRow.circle.setBackgroundResource(R.drawable.blue_circle)
-        }
-        else if(color == "PURPLE") {
-            departureRow.circle.setBackgroundResource(R.drawable.purple_circle)
+    private fun setCircleColor(departureRow: View, color: String) {
+        when (color) {
+            "YELLOW" -> {
+                departureRow.circle.setBackgroundResource(R.drawable.yellow_circle)
+            }
+            "RED" -> {
+                departureRow.circle.setBackgroundResource(R.drawable.red_circle)
+            }
+            "ORANGE" -> {
+                departureRow.circle.setBackgroundResource(R.drawable.orange_circle)
+            }
+            "GREEN" -> {
+                departureRow.circle.setBackgroundResource(R.drawable.green_circle)
+            }
+            "BLUE" -> {
+                departureRow.circle.setBackgroundResource(R.drawable.blue_circle)
+            }
+            "PURPLE" -> {
+                departureRow.circle.setBackgroundResource(R.drawable.purple_circle)
+            }
         }
     }
 
     fun departureInflater(response: Response<Base>) {
 
-        var etdList = response.body()?.root?.station?.get(0)?.etd
+        val etdList = response.body()?.root?.station?.get(0)?.etd
         if (etdList != null) {
             for (x in etdList) {
                 if(currentDestination == x.destination!!) {
@@ -186,19 +185,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                             R.layout.departure_row,
                             null, false
                         )
+
                         tvStopName.text = response.body()?.root?.station?.get(0)?.name
-                        var departureName = "to $currentDestination"
+                        val departureName = "to $currentDestination"
                         tvDepartureName.text = departureName
 
-                        var minutesText: String
-                        minutesText = if(y.minutes.toString().length > 3) {
+                        var minutesText: String = if(y.minutes.toString().length > 3) {
                             y.minutes.toString()
                         } else {
                             "in ${y.minutes.toString()} min"
                         }
                         
                         departureRow.minutes.text = minutesText
-                        var platformText = "Platform ${y.platform.toString()}"
+                        val platformText = "Platform ${y.platform.toString()}"
                         departureRow.platform.text = platformText
                         setCircleColor(departureRow, y.color!!)
                         departureContent.addView(departureRow)

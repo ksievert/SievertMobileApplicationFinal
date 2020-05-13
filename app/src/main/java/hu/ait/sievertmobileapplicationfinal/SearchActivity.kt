@@ -110,11 +110,7 @@ class SearchActivity : AppCompatActivity() {
         if (etdList != null) {
             for(x in etdList) {
                 currentDestination = x.destination!!
-//                for(y in x.estimate!!) {
-                    destinationAdapter.addDestinationItem(currentDestination)
-                    //resultRow.ivRouteColor.setImageDrawable()
-                    //y.hexcolor?.toInt()?.let { resultRow.ivRouteColor.setBackgroundColor(it) }
-//                }
+                destinationAdapter.addDestinationItem(currentDestination)
             }
         }
     }

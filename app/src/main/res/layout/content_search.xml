@@ -13,19 +13,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!--    <TextView-->
-<!--        android:id="@+id/tvJSON"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_margin="@dimen/text_margin"-->
-<!--        android:text="json file goes here" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/tvSearchError"-->
-<!--            android:textSize="15sp"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:gravity="center_horizontal"/>-->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/searchToolbar"
             android:layout_width="match_parent"
@@ -33,51 +20,40 @@
             android:background="@color/colorPrimary"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-        <LinearLayout
-            android:id="@+id/layoutSearchBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-        <AutoCompleteTextView
-            android:id="@+id/autoTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="8"
-            android:textColor="@color/colorWhite"
-            android:textColorHint="@color/colorLightGrayText"
-            android:hint="@string/search_for_stop_name"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            <LinearLayout
+                android:id="@+id/layoutSearchBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+                <AutoCompleteTextView
+                    android:id="@+id/autoTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="8"
+                    android:textColor="@color/colorWhite"
+                    android:textColorHint="@color/colorLightGrayText"
+                    android:hint="@string/search_for_stop_name"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-            <requestFocus />
-        </AutoCompleteTextView>
+                    <requestFocus />
+                </AutoCompleteTextView>
 
-        <Button
-            android:id="@+id/btnSearch"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_weight="2"
-            android:text="@string/search"
-            app:layout_constraintBottom_toBottomOf="@+id/autoTextView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/autoTextView" />
-        </LinearLayout>
+                <Button
+                    android:id="@+id/btnSearch"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_weight="2"
+                    android:text="@string/search"
+                    app:layout_constraintBottom_toBottomOf="@+id/autoTextView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/autoTextView" />
+            </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
-
-<!--        <View-->
-<!--            android:id="@+id/ivDividerLine"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="5dp"-->
-<!--            android:layout_marginTop="5dp"-->
-<!--            android:layout_marginBottom="5dp"-->
-<!--            android:src="@drawable/divider_line"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/searchToolbar" />-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvContent"

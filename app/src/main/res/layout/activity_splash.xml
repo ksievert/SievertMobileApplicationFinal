@@ -11,8 +11,9 @@
         android:id="@+id/tvStopName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="BART Stop Search"
+        android:text="@string/bart_stop_search"
         android:textColor="@color/colorWhite"
+        android:layout_margin="8dp"
         android:textSize="80sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/tvDepartureName"
@@ -22,9 +23,10 @@
         android:id="@+id/tvDepartureName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="San Francisco Public Transit"
+        android:text="@string/san_francisco_public_transit"
         android:textColor="@color/colorWhite"
         android:textSize="30sp"
+        android:layout_margin="8dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -40,6 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_margin="8dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="@+id/guideline3">
 

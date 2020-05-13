@@ -101,6 +101,8 @@
     <string name="stop_name">Stop name</string>
     <string name="default_text">Default text</string>
     <string name="back_to_search">New Search</string>
+    <string name="san_francisco_public_transit">San Francisco Public Transit</string>
+    <string name="bart_stop_search">BART Stop Search</string>
 
     <string-array name="all_stops">
         <item>12th St. Oakland City Center</item>
@@ -119,7 +121,7 @@
         <item>Concord</item>
         <item>Daly City</item>
         <item>Downtown Berkeley</item>
-        <item>Dublin/Pleasanton</item>
+        <item>Dublin / Pleasanton</item>
         <item>El Cerrito del Norte</item>
         <item>El Cerrito Plaza</item>
         <item>Embarcadero</item>
@@ -134,7 +136,7 @@
         <item>Milpitas</item>
         <item>Montgomery St.</item>
         <item>North Berkeley</item>
-        <item>North Concord/Martinez</item>
+        <item>North Concord / Martinez</item>
         <item>Oakland Int\'l Airport</item>
         <item>Orinda</item>
         <item>Pittsburg/Bay Point</item>
@@ -149,7 +151,7 @@
         <item>South Hayward</item>
         <item>South San Francisco</item>
         <item>Union City</item>
-        <item>Warm Springs/South Fremont</item>
+        <item>Warm Springs / South Fremont</item>
         <item>Walnut Creek</item>
         <item>West Dublin</item>
         <item>West Oakland</item>
